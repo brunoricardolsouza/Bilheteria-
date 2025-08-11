@@ -3,13 +3,16 @@ let typeFilm = "";
 let minimumAge = 0;
 let rawPriceTicket;
 let priceTicket;
-let cardDiscount;
+let cardDiscount ="";
 let valueSnacks;
 let nameSnacks;
-let valueCupom;
+let valueCupom = 0;
 let total;
 let paymentMethod;
 let subtotal = 0;
+let shiftFilm;
+let discountMethod;
+let nameCupom;
 
 //Boas Vindas & Identificação
 let nameUser = prompt("Insira seu nome: ");
@@ -58,7 +61,7 @@ console.log("o nome do filme é: "+ nameFilm +", e seu genero é: "+ typeFilm)
 
 //Validação de Idade
 let ageUser = Number(prompt("Insira a sua idade: "))
-while (ageUser < 0 && ageUser > 120) {
+while (ageUser < 0 || ageUser > 120) {
   alert("Idade invalida!")
   ageUser = prompt("Insira a sua idade: ")
 }
@@ -72,36 +75,36 @@ if (ageUser >= minimumAge) {
 alert("=== Tabela preço ingressos ===\nMadrugada [00h-05h] = 16 R$\nManha        [06h-12h] = 18 R$\nTarde          [13h-17h] = 22 R$\nNoite          [18h-23h] = 28 R$")
 
 
-let entryTime = Number(prompt("Escolha o horario você deseja asssitir: "))
-while (entryTime < 0 && entryTime > 24) {
+let entryTime = Number(prompt("Escolha o horario você deseja assistir: "))
+while (entryTime < 0 || entryTime > 24 || isNaN(entryTime)) {
   alert("Horario inexistente!")
-  entryTime = Number(prompt("Escolha o horario você deseja asssitir: "))
+  entryTime = Number(prompt("Escolha o horario você deseja assistir: "))
 }
 
-switch (entryTime) {
-  case entryTime > 0 && entryTime <= 6:
-    rawPriceTicket = 16
-    break;
-  case entryTime > 6 && entryTime <= 12:
-    rawPriceTicket = 18
-    break;
-  case entryTime > 12 && entryTime <= 17:
-    rawPriceTicket = 22
-    break;
-  default:
-    rawPriceTicket = 28
-    break;
+if (entryTime > 0 && entryTime <= 6) {
+  rawPriceTicket = 16
+  shiftFilm = "Madrugada"
+} else if (entryTime > 6 && entryTime <= 12) {
+  rawPriceTicket = 18
+  shiftFilm = "Manhã"
+} else if (entryTime > 12 && entryTime <= 17) {
+  rawPriceTicket = 22
+  shiftFilm = "Tarde"
+} else {
+  rawPriceTicket = 28
+  shiftFilm = "Noite"
 }
+
 //Verificação Meia-Entrada
 if (ageUser > 12 && ageUser < 60) {
-  let cardDiscount = prompt("Possui carteirinha de meia entrada? [S/N]: ").toUpperCase()
-  while (cardDiscount.trim() !== "S" && cardDiscount.trim() !=="N") {
+  cardDiscount = prompt("Possui carteirinha de meia entrada? [S/N]: ").toUpperCase()
+  while (cardDiscount === null || cardDiscount.trim() === "" || (cardDiscount.trim() !== "S" && cardDiscount.trim() !=="N")) {
     alert("Resposta incorreta!")
     cardDiscount = prompt("Possui carteirinha de meia entrada? [S/N]: ").toUpperCase()
  }
 }
 
-if (ageUser <= 12 || ageUser >= 60 || cardDiscount == "S"){
+if (ageUser <= 12 || ageUser >= 60 || cardDiscount === "S"){
   priceTicket = (rawPriceTicket/2)
 } else {
   priceTicket = rawPriceTicket
@@ -121,11 +124,11 @@ switch (comboSnacks) {
     nameSnacks = "Combo Pequeno"
     valueSnacks = 15
     break;
-  case 1:
+  case 2:
     nameSnacks = "Combo Médio"
     valueSnacks = 24
     break;
-  case 1:
+  case 3:
     nameSnacks = "Combo Grande"
     valueSnacks = 30
     break;
@@ -134,25 +137,37 @@ switch (comboSnacks) {
     valueSnacks = 38
     break;
 }
-
+//Total Ingresso + Comida
+total = (priceTicket + valueSnacks)
 //Cupom de Desconto
-let haveCupom = prompt("Você tem cupom de desonto? [S/N]").toUpperCase()
-while (haveCupom.trim() != "S" && haveCupom.trim() != "N") {
+let haveCupom = prompt("Você tem cupom de desconto? [S/N]: ").toUpperCase()
+while (haveCupom === null || haveCupom.trim() === "" || (haveCupom.trim() !== "S" && haveCupom.trim() !== "N")) {
   alert("Opção invalida!")
-  haveCupom = prompt("Você tem cupom de desonto? [S/N]").toUpperCase()
+  haveCupom = prompt("Você tem cupom de desconto? [S/N]: ").toUpperCase()
 }
-
-let nameCupom = prompt("Insira o cupom: ").toUpperCase()
-while (nameCupom.trim() !== "NOITE10" && nameCupom.trim() !== "FILME5") {
-  alert("Cupom inexistente!")
+if (haveCupom === "S") {
   nameCupom = prompt("Insira o cupom: ").toUpperCase()
-}
+  while (nameCupom === null || nameCupom.trim() === "" || (nameCupom.trim() !== "NOITE10" && nameCupom.trim() !== "FILME5")) {
+    alert("Cupom inexistente!")
+    nameCupom = prompt("Insira o cupom: ").toUpperCase()
+  }
+  if (nameCupom.trim() === "NOITE10" && shiftFilm === "Noite") {
+    alert("Cupom aceito!")
+    valueCupom = (total * 0.10)
+  } else if (nameCupom.trim() === "NOITE10" && shiftFilm !== "Noite") {
+    alert("Cupom só é válido à noite!")
+    valueCupom = 0
+  } else if (nameCupom.trim() === "FILME5") {
+    alert("Cupom aceito!")
+    valueCupom = 5
+  }
+} 
 
 //Forma de Pagamento
 alert("=== Forma de pagamento ===\n 1 - Dinheiro\n 2 - Débito\n 3 - Crédito\n 4 - Outro")
 
 let paymentOption = Number(prompt("Qual forma de pagamento: "))
-while (paymentOption < 1 && paymentOption > 4) {
+while (paymentOption < 1 || paymentOption > 4) {
   alert("Forma de pagamento inexistente!")
   paymentOption = Number(prompt("Qual forma de pagamento: "))
 }
@@ -161,48 +176,44 @@ switch (paymentOption) {
     paymentMethod = "Dinheiro"
     discountMethod = 0.95
     break;
-  case 2 || 4:
+  case 2:
     paymentMethod = "Débito"
-    discountMethod = 0
+    discountMethod = 1.00
     break;
   case 3:
     paymentMethod = "Crédito"
     discountMethod = 1.03
     break;
+  case 4:
+    paymentMethod = "Débito"
+    discountMethod = 1.00
+    break;
 }
 
-//Cálculo do total
-total = (priceTicket + valueSnacks)
-
-if (nameCupom == "NOITE10") {
-  valueCupom = (total * 0.10)
-} else {
-  valueCupom = 5
-} 
-
-//Comprovante 
+//Calculo total
 subtotal = ((total - valueCupom) * discountMethod)
 console.log("=== Pagamento ===")
 console.log("Total -> "+ total.toFixed(2))
-console.log("Sub-Total -> "+ subtotal)
+console.log("Sub-Total -> "+ subtotal.toFixed(2))
 
 let acceptPayment = prompt("Deseja prosseguir para o pagamento? [S/N]: ").toUpperCase()
-while (acceptPayment.trim() != "S" && acceptPayment.trim() != "N") {
+while (acceptPayment.trim() !== "S" && acceptPayment.trim() !== "N") {
   alert("Opção invalida!")
   acceptPayment = prompt("Deseja efetuar o pagamento? [S/N]: ").toUpperCase()
 }
 profileLogin = false
-
-console.log("=== Nota Fiscal ===")
-console.log("Nome: "+ nameUser)
-console.log("Filme: "+ nameFilm)
-console.log("Preço do ingresso: "+ priceTicket.toFixed(2))
-console.log("Preço do Combo: "+ valueSnacks.toFixed(2))
-console.log("Total -> "+ total.toFixed(2))
-console.log("-------------------")
-console.log("Cupom de: -" + valueCupom.toFixed(2))
-console.log("Forma de pag: "+ paymentMethod)
-console.log("Desc/Acres do pag: "+ discountMethod.toFixed(2))
-console.log("Sub-Total -> "+ subtotal.toFixed(2))
-console.log("-------------------")
-console.log("Obrigado pela compra, bom filme!")
+if (acceptPayment === "S") {
+  console.log("=== Nota Fiscal ===")
+  console.log("Nome: "+ nameUser)
+  console.log("Filme: "+ nameFilm)
+  console.log("Preço do ingresso: "+ priceTicket.toFixed(2))
+  console.log("Preço do Combo: "+ valueSnacks.toFixed(2))
+  console.log("Total -> "+ total.toFixed(2))
+  console.log("-------------------")
+  console.log("Cupom de: -" + valueCupom.toFixed(2))
+  console.log("Forma de pag: "+ paymentMethod)
+  console.log("Desc/Acres do pag: "+ discountMethod.toFixed(2))
+  console.log("Sub-Total -> "+ subtotal.toFixed(2))
+  console.log("-------------------")
+  console.log("Obrigado pela compra, bom filme!")
+}
