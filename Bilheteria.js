@@ -3,7 +3,7 @@ let typeFilm = "";
 let minimumAge = 0;
 let rawPriceTicket;
 let priceTicket;
-let cardDiscount ="";
+let cardDiscount = "";
 let valueSnacks;
 let nameSnacks;
 let valueCupom = 0;
@@ -16,7 +16,7 @@ let nameCupom;
 
 //Boas Vindas & Identificação
 let nameUser = prompt("Insira seu nome: ");
-while (nameUser.trim() === "") {
+while (nameUser === null || nameUser.trim() === "") {
   alert("Nome é obrigatório!")
   nameUser = prompt("Insira o seu nome: ")
 }
@@ -34,12 +34,12 @@ let profileLogin = true;
 
 //Seleção do Filme
 let nameFilm = prompt("Insira o nome do filme: ");
-while (nameFilm.trim() === "") {
+while (nameFilm === null || nameFilm.trim() === "") {
   alert("Nome do filme é obrigatório!")
   nameFilm = prompt("Insira o nome do filme: ")
 }
 let chooseFilm = Number(prompt("Qual tipo de filme? (1-Ação|2-Terror|3-Outros): "));
-while (chooseFilm < 1 || chooseFilm > 3) {
+while (chooseFilm < 1 || chooseFilm > 3 || isNaN(chooseFilm)) {
   alert("Opção invalida!")
   chooseFilm = prompt("Qual tipo de filme? (1-Ação|2-Terror|3-Outros): ")
 }
@@ -61,7 +61,7 @@ console.log("o nome do filme é: "+ nameFilm +", e seu genero é: "+ typeFilm)
 
 //Validação de Idade
 let ageUser = Number(prompt("Insira a sua idade: "))
-while (ageUser < 0 || ageUser > 120) {
+while (ageUser < 0 || ageUser > 120 || isNaN(ageUser)) {
   alert("Idade invalida!")
   ageUser = prompt("Insira a sua idade: ")
 }
@@ -114,7 +114,7 @@ if (ageUser <= 12 || ageUser >= 60 || cardDiscount === "S"){
 alert("=== Combos de Snacks ===\n 1 - Combo Pequeno 15 R$\n 2 - Combo Médio 24 R$\n 3 - Combo Grande 30 R$\n 4 - Combo Familia 38 R$")
 
 let comboSnacks = Number(prompt("Qual combo deseja comprar: "))
-while (comboSnacks < 1 || comboSnacks > 4) {
+while (comboSnacks < 1 || comboSnacks > 4 || isNaN(comboSnacks)) {
   alert("Combo inexistente!")
   comboSnacks = Number(prompt("Qual combo deseja comprar: "))
 }
@@ -167,7 +167,7 @@ if (haveCupom === "S") {
 alert("=== Forma de pagamento ===\n 1 - Dinheiro\n 2 - Débito\n 3 - Crédito\n 4 - Outro")
 
 let paymentOption = Number(prompt("Qual forma de pagamento: "))
-while (paymentOption < 1 || paymentOption > 4) {
+while (paymentOption < 1 || paymentOption > 4 || isNaN(paymentOption)) {
   alert("Forma de pagamento inexistente!")
   paymentOption = Number(prompt("Qual forma de pagamento: "))
 }
