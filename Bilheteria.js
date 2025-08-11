@@ -72,7 +72,7 @@ if (ageUser >= minimumAge) {
 }
 
 //Horario e Preço Ingresso
-alert("=== Tabela preço ingressos ===\nMadrugada [00h-05h] = 16 R$\nManha        [06h-12h] = 18 R$\nTarde          [13h-17h] = 22 R$\nNoite          [18h-23h] = 28 R$")
+alert("=== Tabela preço ingressos ===\nMadrugada [00h-05h] = 16 R$\nManha        [06h-12h] = 18 R$\nTarde          [13h-17h] = 22 R$\nNoite          [18h-23h] = 28 R$ ")
 
 
 let entryTime = Number(prompt("Escolha o horario você deseja assistir: "))
