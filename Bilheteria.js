@@ -105,17 +105,21 @@ function getText(message, errorMessage = "Nome é obrigatório!") {
     if (input === null || input.trim() === "") {
       alert(errorMessage)
     }
-
   } while (input === null || input.trim() === "")
   return input;
 } 
 
 function typeUser(errorEntry = "Tipo de perfil inválido!") {
-  let input; 
-  
+  let input;
+  let choose; 
   do {
     input = prompt("1 - Cliente | 2 - Atendente\nVocê é: ")
-    switch (input.trim()) {
+    if (input === null) {
+      alert("Você não pode cancelar essa etapa!")
+      continue;
+    }
+    choose = input.trim()
+    switch (choose) {
       case "1":
         console.log(`Perfil validado, você é um Cliente`)
         return "Cliente";
@@ -124,17 +128,22 @@ function typeUser(errorEntry = "Tipo de perfil inválido!") {
         return "Atendente";
       default:
         alert(errorEntry)
-        input = null
         break;
     }
-  } while (input !== "1" && input !== "2") 
+  } while (choose !== "1" && choose !== "2") 
 }
 
 function chooseTypeFilm (errorEntry = "Opção invalida!") {
   let input;
+  let choose;
   do {
     input = prompt("1 - Ação | 2 - Terror | 3 - Outros \nQual tipo de filme? ")
-    switch(input.trim()) {
+    if (input === null) {
+      alert("O tipo de filme não pode ficar vazio, escolha de 1 a 3!")
+      continue;
+    }
+    choose = input.trim()
+    switch(choose) {
       case "1":
         return { type: "Ação", minimumAge: 18 };
       case "2":
@@ -145,45 +154,57 @@ function chooseTypeFilm (errorEntry = "Opção invalida!") {
         alert(errorEntry)
         break;
     }
-  } while (input === null || input.trim() === "" || (input !== "1" && input !== "2" && input !== "3"))
+  } while (true)
 }
 
 function ageUser (errorEntry = "Idade validada deve ser entre 0 e 120!") {
+  let input;
   let age;
   do {
-    age = Number(prompt("Insira a sua idade: "))
-    if (age < 0 || age > 120) {
+    input = prompt("Insira a sua idade: ")
+    if (input === null) {
+      alert("Idade não pode ser vazia!")
+      continue;
+    }
+    age = Number(input)
+
+    if (isNaN(age) || age < 0 || age > 120) {
       alert(errorEntry)
+      continue;
     } else {
       return age;
     }
-  } while (age < 0 || age > 120)
+  } while (isNaN(age) || age < 0 || age > 120)
 }
 
 function validationAge (age, minimumAge) {
-  let input;
   if (age >= minimumAge) {
     console.log(`Você atende aos requisitos de idade!`)
   } else {
     console.log(`Você não atende aos requisitos de idade! você tem ${age} anos e a idade minima de ${minimumAge} anos`)
   }
-  return input;
 }
 
-function chooseTicketTime (errorEntry = "Horario invalido! Deve ser entre 0h e 24h!") {
-  let input; 
+function chooseTicketTime (errorEntry = "Horário invalido! Deve ser entre 0h e 24h!") {
+  let input;
+  let choose;
   do {
-    input = Number(prompt("Insira o horario do ingresso: "))
-    if (input < 0 || input >= 24) {
+    input = prompt("Insira o horário do ingresso: ")
+    if (input === null) {
+      alert("Horário não pode ser vazio, escolha um horario entre 0h e 24!")
+      continue;
+    }
+    choose = Number(input)
+    if (isNaN(choose) || choose < 0 || choose >= 24) {
       alert(errorEntry)
-    } else if (input >= 0 && input <= 6) {
-      return { hour: input, rawPriceTicket: 16, shift: "Madrugada"}
-    } else if (input > 6 && input <= 12) {
-      return { hour: input, rawPriceTicket: 18, shift: "Manhã"}
-    } else if (input > 12 && input <= 18) {
-      return { hour: input, rawPriceTicket: 22, shift: "Tarde"}
-    } else if (input > 18 && input < 24) {
-      return { hour: input, rawPriceTicket: 28, shift: "Noite"}
+    } else if (choose >= 0 && choose <= 6) {
+      return { hour: choose, rawPriceTicket: 16, shift: "Madrugada"}
+    } else if (choose > 6 && choose <= 12) {
+      return { hour: choose, rawPriceTicket: 18, shift: "Manhã"}
+    } else if (choose > 12 && choose <= 18) {
+      return { hour: choose, rawPriceTicket: 22, shift: "Tarde"}
+    } else if (choose > 18 && choose < 24) {
+      return { hour: choose, rawPriceTicket: 28, shift: "Noite"}
     }
   } while (true)
 }
@@ -193,7 +214,11 @@ function halfPrice(age, rawPriceTicket) {
   let priceTicket;
   if (age > 12 && age < 60) {
     do {
-      cardDiscount = prompt("Você tem carteirinha de desconto? [S/N]: ").toUpperCase()
+      let input = prompt("Você tem carteirinha de desconto? [S/N]: ")
+      if (input === null) {
+        return {priceTicket: rawPriceTicket, halfEntry: false};
+      }
+      cardDiscount = input.trim().toUpperCase()
       switch (cardDiscount) {
         case "S":
           priceTicket = rawPriceTicket/2
@@ -212,9 +237,14 @@ function halfPrice(age, rawPriceTicket) {
 
 function chooseSnacks() {
   let input;
+  let choose;
   do {
     input = prompt("=== Combos de Snacks ===\n 1 - Combo Pequeno 15 R$\n 2 - Combo Médio 24 R$\n 3 - Combo Grande 30 R$\n 4 - Combo Família 38 R$\n===================\nEscolha seu combo snack: ")
-    switch(input) {
+    if (input === null) {
+      return {combo: "Nenhum", price: 0};
+    }
+    choose = input.trim()
+    switch(choose) {
       case "1":
         return {combo: "Pequeno", price: 15};
       case "2":
@@ -229,22 +259,27 @@ function chooseSnacks() {
   } while (true)
 }
 
-function discountCoupon(shift , priceTicket) {
+function discountCoupon(shift, priceTicket) {
+  let input;
   let haveCoupon;
   let finalPriceTicket = 0;
   do {
-      haveCoupon = prompt("Você tem cupom de desconto? [S/N]: ").trim().toUpperCase();
-      if (haveCoupon === null) {
+      input = prompt("Você tem cupom de desconto? [S/N]: ")
+      if (input === null) {
         console.log("Operação cancelada!")
         return priceTicket;
       }
+      haveCoupon = input.trim().toUpperCase()
       switch (haveCoupon) { 
         case "S": {
-            const nameCoupon = prompt("Insira seu cupom: ").trim().toUpperCase();
-            if (nameCoupon === null) {
+            let inputName = prompt("Insira seu cupom: ")
+            if (inputName === null) {
               console.log("Operação cancelada!")
               return priceTicket;
-            } else if (nameCoupon === "NOITE10" && shift === "Noite") {
+            } 
+            const nameCoupon = inputName.trim().toUpperCase()
+      
+            if (nameCoupon === "NOITE10" && shift === "Noite") {
               finalPriceTicket = (priceTicket - (priceTicket * 0.10))
             } else if (nameCoupon === "FILME5") {
               finalPriceTicket = (priceTicket - 5)
@@ -252,25 +287,29 @@ function discountCoupon(shift , priceTicket) {
                 finalPriceTicket = priceTicket
               console.log(`Cupom inexistente!`)
               }
-            break;
             }
+          return finalPriceTicket;
         case "N":
           return priceTicket;
         default:
           alert("Valor invalido! Escolha S ou N!")
           continue;
       }
-      break;
     } while (true)
-    return finalPriceTicket;
 } 
 
 function paymentMethod(total) {
   let input;
+  let choose;
   do {
     let value = 0;
     input = prompt("=== Forma de Pagamento ===\n 1 - Dinheiro \n 2 - Débito\n 3 - Crédito \n 4 - Outro")
-    switch (input) {
+    if (input === null) {
+      alert("Escolha uma forma de pagamento, de 1 a 4!")
+      continue;
+    }
+    choose = input.trim().toUpperCase()
+    switch (choose) {
       case "1":
         value = total*0.05
         return {method: "Dinheiro", paymentAdjustment: value}
